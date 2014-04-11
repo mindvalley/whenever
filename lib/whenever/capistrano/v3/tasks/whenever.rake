@@ -3,6 +3,11 @@ namespace :whenever do
     args = Array(fetch(:whenever_command)) + args
 
     on roles fetch(:whenever_roles) do |host|
+      unless host
+        warn "No matching hosts for whenever tasks."
+        break
+      end
+
       args_for_host = block_given? ? args + Array(yield(host)) : args
       within release_path do
         with fetch(:whenever_command_environment_variables) do
